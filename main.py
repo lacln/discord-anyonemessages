@@ -8,6 +8,7 @@ from discord.ext import commands
 
 load_dotenv(override=True)
 token = os.environ['CLIENT_TOKEN']
+channels = os.getenv("GUILD_IDS")
 # print(token)
 
 # # #Intents --> what the bot intends to receive from the API
@@ -73,24 +74,38 @@ token = os.environ['CLIENT_TOKEN']
 
 bot = commands.Bot()
 
+
+"""
+NEXT UP
+
+get args for the slash command
+figure out who wrote the command (author)
+get a message id number of messages sent/recieved
+"""
+
 @bot.slash_command(
-    name="note_create"
+    name="note_create",
+    guild_ids=[channels]
 )
 
 @bot.slash_command(
-    name="note_edit"
+    name="note_edit",
+    guild_ids=[channels]
 )
 
 @bot.slash_command(
-    name="note_append"
+    name="note_append",
+    guild_ids=[channels]
 )
 
 @bot.slash_command(
-    name="note_delete_lines"
+    name="note_delete_lines",
+    guild_ids=[channels]
 )
 
 @bot.slash_command(
-    name="note_delete"
+    name="note_delete",
+    guild_ids=[channels]
 )
 
 async def note_create(ctx):
@@ -110,5 +125,6 @@ async def note_delete(ctx):
 
 #MAIN
 if __name__ == "__main__":
-    bot.run(token)
     print("The bot is running...")
+    bot.run(token)
+    
