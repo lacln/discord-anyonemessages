@@ -75,10 +75,33 @@ async def note_create(ctx, content):
     description="new note contents"
 )
 async def note_edit(ctx, message_id, content):
-    grabMessage = await ctx.fetch_message(message_id)
-    await grabMessage.edit(content=content)
-    await ctx.respond("DONE", delete_after=1)
+    try:
+        grabMessage = await ctx.fetch_message(message_id.strip())
+        await grabMessage.edit(content=f"### Note: {message_id}   --   Created By: {str(ctx.user.name)}\n{content}")
+        await ctx.respond("DONE", delete_after=1)
+    except discord.errors.NotFound:
+        await ctx.respond("ERROR: MESSAGE ID NOT FOUND")
+    
 
+## TO BE IMPLEMENTED, ISSUE CURRENTLY MESSAGE ID SHOULD BE UPDATED
+# @bot.slash_command(
+#     name="note_edit_ping",
+#     description="Edit an existing note",
+#     guild_ids=[channels]
+# )
+# @option(
+#     "message_id",
+#     description="message_id (first line of message)"
+# )
+# @option(
+#     "content",
+#     description="new note contents"
+# )
+# async def note_edit_ping(ctx, message_id, content):
+#     grabMessage = await ctx.fetch_message(message_id)
+#     await ctx.send(content=f"### Note: {message_id}   --   Created By: {str(ctx.user.name)}\n{content}")
+#     await grabMessage.delete()
+#     await ctx.respond("DONE", delete_after=1)
 
 
 @bot.slash_command(
