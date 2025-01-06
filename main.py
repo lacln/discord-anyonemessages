@@ -53,17 +53,13 @@ async def note_create(ctx, content):
     #NOTE_NUM: 00000000 -- CREATED BY: USERNAME
     contEdit = content.split("\\n")
     content = "\n".join(contEdit)
-    await ctx.respond(content=f"### Note: long/right click for Message ID   --   Created By: {str(ctx.user.name)}\n{content}")
 
-    ###### OK, SO APPARENTLY EDITED MESSAGES (IN PYCORD) CREATE A NEW ID
-    ###### I CANNOT FIND ANY WAY TO GET AROUND THIS (EMBED THE ID INTO MESSAGE)
-    ###### LUCKY, YOU CAN COPY A MESSAGES ID BY LONG/RIGHT CLICK
-    ###### BUT NOBODY KNOWS THIS SO WILL NEED TO FIND A WAY TO INFOM WHEN EDIT COMMAND PRESSED (OR CREATE "HELP" COMMAND... :( ))
-    # # # # # message = await ctx.respond("CREATING, PLEASE WAIT...")
-    # # # # # print(message.id)
-    # # # # # #edit the created message and add the message ID
-    # # # # # d = await ctx.edit(content=f"### Note: {message.id}   --   Created By: {str(ctx.user.name)}\n{content}")
-    # # # # # print(d.id)
+    await ctx.respond("CREATING, PLEASE WAIT...", delete_after=1)
+    message = await ctx.send("POPULATING...")
+    print(message.id)
+    #edit the created message and add the message ID
+    await message.edit(content=f"### Note: {message.id}   --   Created By: {str(ctx.user.name)}\n{content}")
+
 
 @bot.slash_command(
     name="note_edit",
@@ -78,10 +74,11 @@ async def note_create(ctx, content):
     "content",
     description="new note contents"
 )
-async def note_edit(ctx):
-    grabMessage = await ctx.fetch_message(1325799365343973468)
-    grabMessage.edit(content="OKOKOKOKO")
-    # await ctx.respond("note should be edited")
+async def note_edit(ctx, message_id, content):
+    grabMessage = await ctx.fetch_message(message_id)
+    await grabMessage.edit(content=content)
+    await ctx.respond("DONE", delete_after=1)
+
 
 
 @bot.slash_command(
