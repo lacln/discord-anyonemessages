@@ -115,11 +115,15 @@ async def note_edit(ctx, message_id, content):
 )
 @option(
     "content",
-    description="content to append"
+    description="content to append (maybe add a space at the start)"
 )
-async def note_append(ctx):
-    await ctx.respond("note should be appended")
-    print(ctx)
+async def note_append(ctx, message_id, content):
+    try:
+        grabMessage = await ctx.fetch_message(message_id.strip())
+        await grabMessage.edit(f"{grabMessage.content + content}")
+        await ctx.respond("DONE", delete_after=1)
+    except discord.errors.NotFound:
+        await ctx.respond("ERROR: MESSAGE ID NOT FOUND")
 
 
 ##COMMAND TO BE IMPLEMENTED LATER
