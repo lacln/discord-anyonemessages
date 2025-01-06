@@ -51,8 +51,11 @@ BACKEND IN JSON FORMAT IN EXTERNAL FLAT FILE
 async def note_create(ctx, content):
     #Ensure first line of file is auto added
     #NOTE_NUM: 00000000 -- CREATED BY: USERNAME
-    await ctx.respond(f"note should be created and content is {content}")
-
+    contEdit = content.split("\\n")
+    content = "\n".join(contEdit)
+    message = await ctx.respond("CREATING, PLEASE WAIT...")
+    #edit the created message and add the message ID
+    await ctx.edit(content=f"### Note: {message.id}   --   Created By: {str(ctx.user.name)}\n{content}")
 
 @bot.slash_command(
     name="note_edit",
@@ -68,7 +71,8 @@ async def note_create(ctx, content):
     description="new note contents"
 )
 async def note_edit(ctx):
-    await ctx.respond("note should be edited")
+    await ctx.edit(content="this should not work")
+    # await ctx.respond("note should be edited")
 
 
 @bot.slash_command(
@@ -86,6 +90,7 @@ async def note_edit(ctx):
 )
 async def note_append(ctx):
     await ctx.respond("note should be appended")
+    print(ctx)
 
 
 ##COMMAND TO BE IMPLEMENTED LATER
