@@ -150,9 +150,19 @@ async def note_append(ctx):
     "message_id",
     description="message_id (first line of message)"
 )
-async def note_delete(ctx):
+async def note_delete(ctx, message_id):
     ## CHECK HERE RUNNING COMMAND USER IS SAME AS OWNER USER (OR ADMIN IF THAT CAN BE DETERMINED)
-    await ctx.respond("note should be deleted")
+    ## require a "are you sure" IMPLEMENT LATER
+    try:
+        grabMessage = await ctx.fetch_message(message_id.strip())
+        # print(grabMessage.content.split('\n')[0].split('Created By: ')[-1])
+        if grabMessage.content.split('\n')[0].split('Created By: ')[-1] == ctx.user.name:
+            await grabMessage.delete()
+            await ctx.respond(f"MESSAGE {message_id} DELETED")
+        else:
+            await ctx.respond("ERROR: ONLY THE CREATOR CAN DELETE THIS NOTE")
+    except discord.errors.NotFound:
+        await ctx.respond("ERROR: MESSAGE ID NOT FOUND")
 
 #MAIN
 if __name__ == "__main__":
