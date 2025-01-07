@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import discord
 from discord import option
 from discord.ext import commands
+import re
 
 load_dotenv(override=True)
 token = os.environ['CLIENT_TOKEN']
@@ -51,6 +52,7 @@ BACKEND IN JSON FORMAT IN EXTERNAL FLAT FILE
 async def note_create(ctx, content):
     #Ensure first line of file is auto added
     #NOTE_NUM: 00000000 -- CREATED BY: USERNAME
+    content = re.sub("\s--\s", "\n- ", content)
     contEdit = content.split("\\n")
     content = "\n".join(contEdit)
 
@@ -76,6 +78,10 @@ async def note_create(ctx, content):
 )
 async def note_edit(ctx, message_id, content):
     try:
+        content = re.sub("\s--\s", "\n- ", content)
+        contEdit = content.split("\\n")
+        content = "\n".join(contEdit)
+
         grabMessage = await ctx.fetch_message(message_id.strip())
         await grabMessage.edit(content=f"### Note: {message_id}   --   Created By: {str(ctx.user.name)}\n{content}")
         await ctx.respond("DONE", delete_after=1)
@@ -119,6 +125,10 @@ async def note_edit(ctx, message_id, content):
 )
 async def note_append(ctx, message_id, content):
     try:
+        content = re.sub("\s--\s", "\n- ", content)
+        contEdit = content.split("\\n")
+        content = "\n".join(contEdit)
+
         grabMessage = await ctx.fetch_message(message_id.strip())
         await grabMessage.edit(f"{grabMessage.content + content}")
         await ctx.respond("DONE", delete_after=1)
